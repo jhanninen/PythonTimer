@@ -18,7 +18,7 @@ class Stopwatch():
         
     def start_or_pause(self):
         if self.paused:
-            self.time += self.paused_at - time.time()
+            self.time = self.time + (time.time() - self.paused_at)
             self.paused = False
         else:
             self.paused_at = time.time()
