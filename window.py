@@ -1,10 +1,17 @@
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QHBoxLayout, QVBoxLayout
+from PyQt5.QtCore import QThread
+
+from stopwatch import Stopwatch
+import threading, time
 
 class Window(QWidget):
 
     def __init__(self):
         super().__init__()
+        self.stopwatch = Stopwatch()
         self.initUI()
+        self.updater = ValueUpdater(self)
+        self.updater.start()
     
     def initUI(self):
         # Window properties
@@ -13,14 +20,16 @@ class Window(QWidget):
         
         # Label
         self.timer_label = QLabel(self)
-        self.timer_label.setText("Tähän tulee ajastin")
+        self.timer_label.setText(str(self.stopwatch.get_time()))
         
         # Push buttons
-        start_button = QPushButton('Start / Pause')
-        reset_button = QPushButton('Reset')
+        self.start_button = QPushButton('Start / Pause', self)
+        self.start_button.clicked.connect(self.start_pressed)
+        self.reset_button = QPushButton('Reset', self)
+        self.reset_button.clicked.connect(self.reset_pressed)
         
         # Layout
-        
+
         label_row = QHBoxLayout()
         label_row.addStretch(1)
         label_row.addWidget(self.timer_label)
@@ -28,8 +37,8 @@ class Window(QWidget):
         
         button_row = QHBoxLayout()
         button_row.addStretch(1)
-        button_row.addWidget(start_button)
-        button_row.addWidget(reset_button)
+        button_row.addWidget(self.start_button)
+        button_row.addWidget(self.reset_button)
         button_row.addStretch(1)
         
         vert_layout = QVBoxLayout()
@@ -42,3 +51,26 @@ class Window(QWidget):
         
         self.show()
     
+    def start_pressed(self):
+        self.stopwatch.start_or_pause()
+        
+    def reset_pressed(self):
+        self.stopwatch.reset()
+        
+
+class ValueUpdater(QThread):
+
+    def __init__(self, window):
+        super().__init__()
+        self.window = window
+
+    def run(self):
+        while True:
+            time.sleep(1)
+            print(self.window.stopwatch.get_time())
+            self.window.timer_label.setText(str(self.window.stopwatch.get_time()))
+            self.window.timer_label.adjustSize()
+            self.window.show()
+    
+
+        
