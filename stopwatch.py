@@ -7,7 +7,8 @@ class Stopwatch():
         
     def reset(self):
         self.time = time.time()
-        self.paused = False
+        self.paused_at = self.time
+        self.paused = True
         
     def get_time(self):
         if not self.paused:
@@ -15,12 +16,10 @@ class Stopwatch():
         else:
             return self.paused_at - self.time
         
-    def pause_timer(self):
-        self.paused_at = time.time()
-        self.paused = True
-        
-    def resume_timer(self):
+    def start_or_pause(self):
         if self.paused:
             self.time += self.paused_at - time.time()
             self.paused_at = None
-    
+        else:
+            self.paused_at = time.time()
+            self.paused = True
