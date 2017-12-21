@@ -1,6 +1,6 @@
 import time
 
-class Timer():
+class Stopwatch():
 
     def __init__(self):
         self.reset()
