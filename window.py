@@ -67,7 +67,7 @@ class ValueUpdater(QThread):
     def run(self):
         while True:
             time.sleep(0.1)
-            self.window.timer_label.setText(str(self.window.stopwatch.get_time()))
+            self.window.timer_label.setText(str("{:.1f}".format(self.window.stopwatch.get_time())))
             self.window.timer_label.adjustSize()
             self.window.show()
     
