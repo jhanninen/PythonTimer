@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QHBoxLayout, QVBoxLayout
+from PyQt5.QtGui import QFont
 from PyQt5.QtCore import QThread
 
 from stopwatch import Stopwatch
@@ -21,6 +22,7 @@ class Window(QWidget):
         # Label
         self.timer_label = QLabel(self)
         self.timer_label.setText(str(self.stopwatch.get_time()))
+        self.timer_label.setFont(QFont('SansSerif', 20))
         
         # Push buttons
         self.start_button = QPushButton('Start / Pause', self)
