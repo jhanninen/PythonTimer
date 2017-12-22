@@ -12,7 +12,7 @@ class Window(QWidget):
         self.stopwatch = Stopwatch()
         self.initUI()
         self.updater = ValueUpdater(self)
-        self.updater.start()
+        
     
     def initUI(self):
         # Window properties
@@ -54,7 +54,12 @@ class Window(QWidget):
         self.show()
     
     def start_pressed(self):
+        if self.updater.isRunning():
+            self.updater.quit()
+        else:
+            self.updater.start()
         self.stopwatch.start_or_pause()
+        
         
     def reset_pressed(self):
         self.stopwatch.reset()
