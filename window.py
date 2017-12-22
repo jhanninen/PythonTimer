@@ -21,7 +21,7 @@ class Window(QWidget):
         
         # Label
         self.timer_label = QLabel(self)
-        self.timer_label.setText(str(self.stopwatch.get_time()))
+        self.timer_label.setText(self.get_formatted_time())
         self.timer_label.setFont(QFont('SansSerif', 20))
         
         # Push buttons
@@ -60,9 +60,16 @@ class Window(QWidget):
             self.updater.start()
         self.stopwatch.start_or_pause()
         
-        
     def reset_pressed(self):
         self.stopwatch.reset()
+        
+    def get_formatted_time(self):
+        s = self.stopwatch.get_time()
+        t = (int) (s // 3600)
+        s -= t * 3600
+        m = (int) (s // 60)
+        s -= m * 60
+        return "{:02d}:{:02d}:{:04.1f}".format(t, m, s)
         
 
 class ValueUpdater(QThread):
@@ -74,9 +81,7 @@ class ValueUpdater(QThread):
     def run(self):
         while True:
             time.sleep(0.1)
-            self.window.timer_label.setText(str("{:.1f}".format(self.window.stopwatch.get_time())))
+            self.window.timer_label.setText(self.window.get_formatted_time())
             self.window.timer_label.adjustSize()
             self.window.show()
     
-
-        
